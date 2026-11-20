@@ -1,0 +1,151 @@
+schema_version: "1.0"
+kind: reproduction
+claim_id: gidney-ekera-rsa2021
+reproduction_id: qsharp-modexp-qre-2026-11
+results_file: reproductions/qsharp-modexp-qre-2026-11/results.json
+tool:
+  name: A Q# circuit for the paper's modular exponentiation, the paper's layout and timing model rebuilt as code, and the QDK resource estimator
+  role: >-
+    The notebook builds the windowed modular exponentiation of Section 2 as a Q# circuit (coset
+    representation, oblivious carry runways with the runway reduction of Fig. 3, Cuccaro adders confined
+    to each runway piece, table lookups with measurement-based uncomputation, and the semi-classical
+    Fourier transform). It checks the circuit by simulation on small instances: the whole exponentiation
+    exactly against modular powers, the superposed initialization against an exact classical count, and
+    order finding end to end against the ideal frequency distribution. It counts the circuit at full
+    size with Table 3's parameters and applies the layout and timing model of Secs. 2.10-2.14, rebuilt
+    as code, to those counts. The QDK resource estimator gives an independent physical estimate. The
+    authors' ancillary script is downloaded, checked against a pinned SHA-256, and rerun as a cross-check
+    only.
+  url: https://github.com/microsoft/qdk
+headline_scenario: paper-layout-rebuilt
+scenarios:
+  paper-layout-rebuilt:
+    label: The paper's layout and timing model, rebuilt
+    description: >-
+      Secs. 2.10-2.14 as code, applied to the circuit's counts. Each runway piece is the stated width
+      (fourteen CCZ factories of fifteen by eight patches at level-1 distance seventeen, in two rows) and
+      thirty-three rows of operating area, plus the rows the three registers' share of the piece fills.
+      Each patch takes 2(d+1)^2 physical qubits at the imposed distance of Table 3. Each lookup addition
+      takes d/2 cycles per sequential Toffoli of its lookup, one reaction time per Toffoli of one piece's
+      adder (pieces in parallel), and the stated millisecond for the rest; runway reductions are
+      reaction limited. Topological, distillation, approximation and post-processing failures combine
+      assuming independence, and the expected runtime divides the time per run by the chance a run
+      succeeds. The model uses only the cycle and reaction times; the gate and measurement times in
+      results.json are the estimator scenario's, recorded because the schema requires them. The
+      comparison table uses this scenario.
+    references:
+      - label: Gidney and Fowler (2019), efficient magic state factories with a catalyzed CCZ to 2T transformation
+        url: https://doi.org/10.22331/q-2019-04-30-135
+      - label: Gidney and Fowler (2019), flexible layout of surface code computations using AutoCCZ states
+        url: https://arxiv.org/abs/1905.08916
+  qre-cultivation-ccx:
+    label: QDK resource estimator, cultivation and CCX factories
+    description: >-
+      An independent physical model of the same counts. One run is the circuit's Toffoli count executed
+      one after another on its peak logical qubits, with Toffolis consumed as CCX magic states through
+      lattice surgery. Toffoli states come from magic state cultivation followed by the 8T-to-CCX factory
+      of Gidney, Shutty, and Jones (2024). The estimator chooses the code distance, searching the
+      paper's range, and uses its own timing with no separate reaction time. Its per-run error budget is
+      the topological and distillation error the rebuilt layout spends; the expected runtime also
+      accounts for the approximation and post-processing failures.
+    references:
+      - label: Gidney, Shutty, and Jones (2024), magic state cultivation
+        url: https://arxiv.org/abs/2409.17595
+figure_map:
+  logical_qubits: "#/logical/num_qubits"
+  toffoli_count: "#/logical/toffoli_count"
+  physical_qubits: "#/physical/0/physical_qubits"
+  runtime_seconds: "#/physical/0/runtime_seconds"
+  code_distance: "#/physical/0/code/distance"
+deviations_from_reported:
+  - aspect: Logical-qubit figure
+    reported: No value at n = 2048; the abstract and Table 1 give the expression 3n + 0.002n lg n, which leaves out distillation and routing
+    used: The peak qubit count of the built circuit, recorded but not compared
+    why: The registry records only printed values, so there is no reported figure to compare against. The circuit's peak also counts the lookup's temporary qubits and the zero padding of the lookup output register.
+  - aspect: Table lookup
+    reported: QROM read with a Toffoli count of 2^(c_exp + c_mul), uncomputed by measurement-based uncomputation at about 2 sqrt(2^(c_exp + c_mul)) Toffolis (Sec. 2.5, Babbush et al. and Berry et al.)
+    used: The QDK's Select operation, a unary-iteration lookup with measurement-based uncomputation, counted on the circuit
+    why: It implements the constructions the paper cites. The notebook counts it at a few Toffolis fewer than the paper's round figures for each lookup and a few fewer for each uncomputation; its count does not depend on the table contents.
+  - aspect: Adder
+    reported: Cuccaro ripple-carry adder, 2n Toffolis for an n-bit addition (Sec. 2.5); the authors' script counts 2(c_sep + c_pad) - 1 per piece
+    used: Cuccaro's adder modulo 2^m inside each runway piece, 2(m - 1) Toffolis, and a carry-out variant with 2m Toffolis for the runway reductions
+    why: Additions inside a piece are modulo the piece's size by design (overflow is the deviation the paper bounds), so the top carry is not needed. The difference is a Toffoli or two per piece per addition.
+  - aspect: Factor bits per multiply-add
+    reported: n + O(lg n) bits including padding and one carry qubit per reduced runway (Secs. 2.7-2.8, Fig. 3); the authors' script iterates over n + c_pad + 2 bits
+    used: The bits of the built circuit after the runway reduction of Fig. 3, n + c_pad + (pieces - 1)
+    why: The count follows the circuit. With two runway pieces it differs from the script's figure by one bit, which changes the number of lookup additions by a small fraction of a percent.
+  - aspect: Padding length
+    reported: c_pad = 2 lg n + lg n_e + delta_off (Secs. 2.8 and 3.1), without saying how it is rounded
+    used: The sum rounded up to an integer, then delta_off added
+    why: A qubit count must be an integer; rounding up keeps the deviation within the paper's bound. The authors' script rounds the same way.
+  - aspect: Gate and measurement times
+    reported: Not stated; the paper gives only a 1 µs surface-code cycle and a 10 µs reaction time (abstract; Table 2)
+    used: The estimator's 100 ns gates and 500 ns measurements, recorded for both scenarios; the rebuilt layout uses only the cycle and reaction times
+    why: The results schema requires gate and measurement times for every scenario and has no field for a reaction time, so the reaction time is stated in the scenario's synthesis text and in the claim's assumptions instead.
+  - aspect: Lookup tables and modulus in the full-size count
+    reported: Tables precomputed from the actual modulus and exponentiation constants
+    used: All-zero tables and the placeholder modulus 2^2047 + 1 when counting at full size; real tables in every simulation check
+    why: The lookup's Toffoli count depends only on its address size, which the notebook confirms; the modulus enters only the initialization's constant additions, a negligible part of the count.
+  - aspect: Algorithm used in the small checks
+    reported: Ekerå-Håstad short discrete logarithm (Sec. 2.1)
+    used: The same exponentiation circuit with the constants of Shor's order finding, and with random constants in the exact checks
+    why: The construction does not depend on which classical constants are multiplied in (Sec. 2.1), and order finding has an ideal output distribution that can be computed for a small modulus.
+  - aspect: Phase corrections when counting
+    reported: Classically controlled phase shifts on each exponent qubit, combined into one shift whose cost the paper treats as negligible (Sec. 2.3)
+    used: One generic rotation per exponent qubit when counting; the exact measured-outcome-dependent angles when simulating
+    why: The counter cannot know the measurement outcomes, and outcome-dependent angles made its rotation count vary from run to run.
+  - aspect: Initialization
+    reported: Two registers prepared in the coset representation with oblivious carry runways, at negligible cost (Sec. 2.15), without a construction
+    used: Each coset padding qubit controls adding a multiple of N and is uncomputed by a comparison; each runway is put in uniform superposition and subtracted from the piece above, top piece first
+    why: The paper gives no construction. The notebook checks the measured failure rate of this initialization against an exact classical count; the cost is counted and is a negligible fraction of the total.
+  - aspect: Counting method
+    reported: Not applicable (the paper's counts come from formulas and its script)
+    used: The count composed from the circuit with no exponent windows and with one window of each size, multiplied by the number of windows of each size
+    why: Counting all windowed multiplications directly exhausted memory in the QDK's estimate caching. The notebook checks on three smaller instances that the composed count equals the direct count, with and without caching.
+  - aspect: Parameter search
+    reported: Window sizes, runway spacing, padding offset and code distances chosen by minimizing a skewed expected spacetime volume (Sec. 3.1)
+    used: Table 3's chosen parameters, imposed
+    why: The aim is to reproduce the costs of the configuration the paper reports. The authors' script, rerun in the notebook, selects the same configuration.
+  - aspect: Level-1 code distance and factory footprint in the layout
+    reported: Level-1 distance 15 (Table 3); the text states the factory footprint, fifteen by eight patches, only for level-1 distance seventeen (Sec. 2.10)
+    used: The footprint and level-1 distance seventeen stated in the text
+    why: The footprint at fifteen is not given in the text. This is the layout Sec. 2.14 evaluates by hand; the paper says its script finds a more compact layout at fifteen, which the rebuilt layout therefore does not capture.
+  - aspect: Width of a runway piece
+    reported: '"15 · 7 + 7 = 113 logical qubits" (Sec. 2.10, p. 11)'
+    used: The stated width, one gap column more than the expression evaluates to
+    why: The stated value matches the board size the paper uses elsewhere (Secs. 2.13-2.14) and the authors' script, which adds a gap column at the edge.
+  - aspect: Distillation error
+    reported: A total of 6.4% for about 3 billion CCZ states at level-1 distance seventeen and level-2 distance twenty-seven, from the spreadsheet of the paper's Ref. [36] (Sec. 2.12)
+    used: The same ratio applied to the circuit's Toffoli count
+    why: The text gives no per-state figure; the ratio is the closest stated value. Because the state count is stated only approximately, this term is uncertain by roughly the same proportion.
+  - aspect: Lookup time
+    reported: 1 µs · d/2 · 2^(c_exp + c_mul) per lookup (Sec. 2.11)
+    used: d/2 cycles for each sequential Toffoli of the circuit's own lookup, for each address size used
+    why: The circuit's lookup has a few Toffolis fewer than the round figure, and some lookups have smaller addresses.
+  - aspect: Runway reductions in the runtime
+    reported: Not included in the runtime estimate
+    used: Each reduction and its reversal timed as reaction-limited additions
+    why: They are part of the built circuit; their share of the runtime is small.
+  - aspect: Estimator scenario
+    reported: Gidney-Fowler CCZ factories with AutoCCZ fixups, a 10 µs reaction time, reaction-limited additions running in parallel runway pieces, and code-depth-limited lookups (Secs. 2.10-2.11)
+    used: Magic state cultivation followed by the 8T-to-CCX factory, the estimator's own timing with 100 ns gates and 500 ns measurements and no reaction time, Toffolis executed one after another, and distances searched over the paper's range
+    why: These are the closest models the QDK estimator provides. It cannot express the paper's piecewise parallel additions, so its runtime is much longer; its qubit count and chosen code distance are an independent check on the layout.
+    references:
+      - label: Gidney, Shutty, and Jones (2024), magic state cultivation
+        url: https://arxiv.org/abs/2409.17595
+interpretation:
+  label: consistent_with_caveats
+  statement: >-
+    The construction of Section 2, built as a circuit, computes modular exponentiations exactly on every
+    small instance checked, keeps the phases that order finding needs, and at full size needs the Toffoli
+    count of Table 1 to within a fraction of a percent. The paper's own layout and timing model, rebuilt
+    from the text and applied to the circuit's counts, gives somewhat more physical qubits than the
+    headline and a somewhat shorter expected runtime. The extra qubits are the difference the paper
+    itself points out between the layout described in its text and the more compact one its script uses,
+    which the text does not specify. The QDK estimator independently chooses the same code distance and
+    a similar qubit count, but with Toffolis executed one after another its runtime is several times
+    longer, which shows how much the runtime claim rests on the reaction-limited parallel additions.
+notes:
+  - The authors' ancillary script estimate_costs.py is downloaded from arXiv at run time and checked against a pinned SHA-256 before it runs, so re-executing the notebook needs network access. Its outputs are printed in the notebook for comparison and are not part of results.json.
+  - The simulation checks are seeded, and each shot is a direct call so that the seed applies; re-executing the notebook reproduces results.json exactly.
+  - The Q# circuit is in modexp.qs and the layout model in physical_layout.py, next to the notebook; every constant in physical_layout.py carries its locator in the paper.

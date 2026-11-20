@@ -1,0 +1,45 @@
+schema_version: "1.0"
+kind: reported
+claim_id: gidney-ekera-rsa2021
+figures:
+  toffoli_count:
+    value: 2700000000
+    unit: count
+    locator: "Table 1, p. 3, row (ours) 2019, n = 2048"
+    qualifier: rounded
+    note: >-
+      Stated as 2.7 in the column "Toffoli+T/2 Count (billions)". Per run: Appendix A.1 and A.2
+      (pp. 28-29) say this column is not adjusted for the chance of retrying, and that the concrete
+      values come from the ancillary file estimate_costs.py. The abstract gives the expression
+      0.3n^3 + 0.0005n^3 lg n, an approximate upper bound that assumes n_e = 1.5n (Sec. 2.8, p. 9);
+      Sec. 2.12 (p. 13) says about 3 billion CCZ states must be distilled.
+  physical_qubits:
+    value: 20000000
+    unit: count
+    locator: "Title; Table 2, p. 3; Table 3, n = 2048 row, p. 16"
+    qualifier: rounded
+    note: >-
+      Stated as 20 million (title), 20 million (Table 2, "(ours) 2019 (parallel)") and 20 megaqubits
+      (Table 3). Sec. 2.14 (p. 13) works the layout through by hand at about 23 million and explains that
+      the title's figure comes from estimate_costs.py, which uses a level-1 code distance of 15 instead
+      of 17.
+  runtime_seconds:
+    value: 28800
+    unit: seconds
+    locator: "Title"
+    qualifier: approximate
+    note: >-
+      Stated as 8 hours, including repeated runs. Table 2 (p. 3) gives an expected runtime of 0.31 days;
+      Table 3 (p. 16) gives 5.1 hours per run with a 31% retry risk; Sec. 2.11 (p. 11) estimates about
+      7 hours for one run with simplified parameters.
+  code_distance:
+    value: 27
+    unit: count
+    locator: "Table 3, n = 2048 row, p. 16"
+    note: >-
+      The level-2 distance used for computation (d2). Distillation uses a level-1 distance of 15
+      (Table 3). Secs. 2.10-2.14 also use 27, with a level-1 distance of 17.
+notes:
+  - "Transcribed from Gidney and Ekerå, How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits, Quantum 5, 433 (2021). Page numbers follow the published PDF, which has the same text and pagination as arXiv:1905.09749v3."
+  - "No logical-qubit figure is recorded. The paper gives only the expression 3n + 0.002n lg n (abstract; Table 1) and prints no value at n = 2048, and the registry records only printed values. The reproduction's peak logical qubit count is in results.json and is not compared."
+  - "The physical-qubit and runtime figures are the title's headline figures, as the issue asks; the more detailed values behind them are in the notes above."

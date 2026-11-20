@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-06T18:20:33+00:00",
+  "generated_at": "2026-11-20T21:10:46+00:00",
   "build": {
     "tool": "qacclaims",
     "tool_version": "0.1.0"
@@ -19,6 +19,20 @@
       "reproduction_status": "partially_reproduced",
       "path": "claims/femoco-low-2025.json",
       "sha256": "9bda45e141717900e95a186f72a6f02b7f5e7c415ffa4e0efcbe17d147410333"
+    },
+    {
+      "id": "gidney-ekera-rsa2021",
+      "title": "RSA-2048 factoring resource estimate with windowed arithmetic, coset representation, and oblivious carry runways (Gidney and Ekerå, 2021)",
+      "short_title": "RSA-2048 resource estimate (Gidney & Ekerå 2021)",
+      "headline": "A 2048-bit RSA integer could be factored in about 8 hours with about 20 million noisy qubits.",
+      "domain": "cryptanalysis",
+      "taxonomy": "application",
+      "claim_type": "literature_resource_estimate",
+      "year": 2021,
+      "publication_status": "review",
+      "reproduction_status": "fully_reproduced",
+      "path": "claims/gidney-ekera-rsa2021.json",
+      "sha256": "9a73819d9003c53e2f3e044724f1aac8b38b1545262a72f64699f987be58094b"
     }
   ]
 }

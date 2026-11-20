@@ -1,0 +1,639 @@
+{
+  "schema_version": "1.0",
+  "id": "gidney-ekera-rsa2021",
+  "title": "RSA-2048 factoring resource estimate with windowed arithmetic, coset representation, and oblivious carry runways (Gidney and Ekerå, 2021)",
+  "short_title": "RSA-2048 resource estimate (Gidney & Ekerå 2021)",
+  "headline": "A 2048-bit RSA integer could be factored in about 8 hours with about 20 million noisy qubits.",
+  "claim_type": "literature_resource_estimate",
+  "domain": "cryptanalysis",
+  "taxonomy": "application",
+  "source": {
+    "type": "journal_article",
+    "title": "How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits",
+    "authors": [
+      "Craig Gidney",
+      "Martin Ekerå"
+    ],
+    "author_list_complete": true,
+    "year": 2021,
+    "venue": {
+      "name": "Quantum",
+      "volume": "5",
+      "article": "433"
+    },
+    "doi": "10.22331/q-2021-04-15-433",
+    "arxiv": "1905.09749v3"
+  },
+  "assertion": {
+    "what_is_claimed": "Factoring a 2048-bit RSA integer with Ekerå and Håstad's algorithm, using windowed arithmetic, the coset representation of modular integers, and oblivious carry runways, takes about 2.7e9 Toffoli gates per run; on a planar grid of qubits with nearest-neighbour connectivity, a physical gate error rate of 1e-3, a 1 µs surface-code cycle, and a 10 µs reaction time, it costs about 20 million physical qubits and about 8 hours, including repeated runs.",
+    "workload": {
+      "system": "RSA-2048 (2048-bit modulus), factored through Ekerå and Håstad's short discrete logarithm in a single run",
+      "target_observable": "factors of a 2048-bit RSA integer",
+      "target_precision": {
+        "value": 0.01,
+        "unit": "dimensionless",
+        "locator": "Sec. 2.1, p. 5; Sec. 3.2, p. 16",
+        "note": "Factoring has no numerical precision target. This is the paper's bound on the classical post-processing failing to recover the factors from a correct run (\"at least 99%\" success), recorded because the schema requires a target, as in the rsa2048-gidney-2025 record."
+      }
+    },
+    "method": "Ekerå–Håstad short discrete logarithm; windowed modular exponentiation in the coset representation with oblivious carry runways, Cuccaro ripple-carry adders and table lookups; semi-classical Fourier transform",
+    "architecture_assumed": "Surface code with lattice surgery on a planar grid; Gidney–Fowler CCZ factories with AutoCCZ fixups; reaction-limited ripple-carry additions running in parallel runway pieces and code-depth-limited lookups (Secs. 2.10-2.14)"
+  },
+  "assumptions_as_reported": {
+    "physical_error_rate": {
+      "value": 0.001,
+      "unit": "dimensionless",
+      "locator": "Abstract, p. 1; Table 2, p. 3"
+    },
+    "surface_code_cycle_time": {
+      "value": 1e-06,
+      "unit": "seconds",
+      "locator": "Abstract, p. 1; Table 2, p. 3"
+    },
+    "reaction_time": {
+      "value": 1e-05,
+      "unit": "seconds",
+      "locator": "Abstract, p. 1; Table 2, p. 3",
+      "note": "Time for the control system to trigger a logical measurement, decode it, and choose the next measurement basis (Appendix B.1, p. 30)"
+    },
+    "connectivity": {
+      "value": "planar grid with nearest-neighbour connectivity",
+      "locator": "Abstract, p. 1; Table 2, p. 3"
+    },
+    "modulus_bits": {
+      "value": 2048,
+      "unit": "bits",
+      "locator": "Title; Table 3, p. 16"
+    },
+    "exponent_qubits": {
+      "value": "n_e = 3(n/2 - 1) - 40",
+      "locator": "Table 3, p. 16",
+      "note": "Ekerå–Håstad's algorithm with a single run (Sec. 3.2)"
+    },
+    "exponent_window": {
+      "value": 5,
+      "unit": "bits",
+      "locator": "Table 3, n = 2048 row, p. 16"
+    },
+    "multiplication_window": {
+      "value": 5,
+      "unit": "bits",
+      "locator": "Table 3, n = 2048 row, p. 16"
+    },
+    "runway_separation": {
+      "value": 1024,
+      "unit": "bits",
+      "locator": "Table 3, n = 2048 row, p. 16"
+    },
+    "padding_offset": {
+      "value": 4,
+      "unit": "bits",
+      "locator": "Table 3, n = 2048 row, p. 16",
+      "note": "delta_off, with c_pad = 2 lg n + lg n_e + delta_off (Secs. 2.8 and 3.1)"
+    },
+    "code_distance": {
+      "value": 27,
+      "unit": "count",
+      "locator": "Table 3, n = 2048 row, p. 16"
+    },
+    "level1_code_distance": {
+      "value": 15,
+      "unit": "count",
+      "locator": "Table 3, n = 2048 row, p. 16",
+      "note": "Distance used inside the distillation factories; Secs. 2.10-2.14 use 17"
+    },
+    "ccz_factories": {
+      "value": 28,
+      "unit": "count",
+      "locator": "Table 2, p. 3; Sec. 2.10, p. 11",
+      "note": "Fourteen per runway piece, two pieces"
+    },
+    "physical_qubits_per_logical_qubit": {
+      "value": "2(d + 1)^2",
+      "locator": "Sec. 1.1, p. 2; Sec. 2.14, p. 13; Fig. 8, p. 14"
+    },
+    "logical_error_rate_per_cycle": {
+      "value": "10^-ceil(d/2 + 1) per logical qubit per surface-code cycle at a 1e-3 gate error rate",
+      "locator": "Sec. 2.13, p. 13"
+    },
+    "retry_risk": {
+      "value": 0.31,
+      "unit": "dimensionless",
+      "locator": "Table 3, n = 2048 row, p. 16"
+    },
+    "post_processing_success": {
+      "value": "at least 99% from a correct run",
+      "locator": "Sec. 2.1, p. 5; Sec. 3.2, p. 16"
+    },
+    "qec_scheme": {
+      "value": "surface code",
+      "locator": "Sec. 1.1, p. 2"
+    }
+  },
+  "assessment": {
+    "reproduction_status": "fully_reproduced",
+    "summary_plain": "QAC built the paper's modular exponentiation as a Q# circuit, checked it on small instances, and counted it at full size with Table 3's parameters: 2.69 × 10⁹ Toffoli gates per run, against the paper's 2.7 × 10⁹. The paper's layout and timing model, rebuilt from the text and applied to those counts, gives 22.33 million physical qubits and an expected 6.8 hours, against the paper's 20 million and 8 hours.",
+    "what_this_shows": [
+      "The construction of Section 2, built as a circuit, computes modular exponentiations exactly on every small instance checked, and order finding with it lands on the ideal frequency peaks, so the arithmetic keeps the phases Shor's algorithm needs.",
+      "At full size with Table 3's parameters, the circuit needs the Toffoli count of Table 1 to within a fraction of a percent.",
+      "The paper's layout and timing model, rebuilt from its text and applied to the circuit's counts, gives a qubit count a little above the headline and a runtime a little below it; the extra qubits match the paper's own hand estimate in Sec. 2.14.",
+      "The QDK resource estimator, given the same counts, independently chooses the same code distance and a qubit count close to the headline."
+    ],
+    "what_this_does_not_show": [
+      "The title's 20 million qubits rest on a more compact factory layout at level-1 distance 15 that the text does not describe; the rebuilt layout uses the layout the text gives, at level-1 distance 17.",
+      "The distillation error per CCZ state is taken from the paper's aggregate figure, not from a simulation of the factory.",
+      "The runtime depends on reaction-limited additions running in parallel runway pieces; the QDK estimator, which runs Toffolis one after another without a reaction time, gives a runtime several times longer, so the 8-hour figure is specific to that architecture.",
+      "No logical-qubit comparison is made, because the paper prints only an asymptotic expression for it.",
+      "The full-size circuit is counted, not simulated; the end-to-end order-finding check uses a small modulus."
+    ],
+    "findings": [
+      {
+        "aspect": "toffoli_count",
+        "verdict": "matches",
+        "note": "Counted from the built circuit with Table 3's parameters; Table 1's figure is per run and rounded to two significant figures."
+      },
+      {
+        "aspect": "physical_qubits",
+        "verdict": "within_factor",
+        "note": "The paper's layout as described in the text, which Sec. 2.14 itself puts above the headline; the headline uses a more compact factory layout from the authors' script."
+      },
+      {
+        "aspect": "runtime_seconds",
+        "verdict": "within_factor",
+        "note": "The paper's per-operation timing applied to the circuit's counts, with the retry risk from the paper's error model; somewhat shorter than the rounded headline."
+      },
+      {
+        "aspect": "code_distance",
+        "verdict": "not_compared",
+        "note": "Imposed from Table 3 in the rebuilt layout; the QDK estimator, choosing freely over the paper's search range, selects the same distance."
+      },
+      {
+        "aspect": "logical_qubits",
+        "verdict": "not_compared",
+        "note": "The paper prints only the expression 3n + 0.002n lg n; the circuit's peak is recorded in results.json."
+      }
+    ],
+    "classical_status": "not_solved_classically_at_target_accuracy",
+    "classical_status_note": "No 2048-bit RSA integer has been publicly factored by classical means."
+  },
+  "review": {
+    "prepared_by": [
+      {
+        "name": "Siya Mehta",
+        "affiliation": "PlexTech, UC Berkeley",
+        "github": "siyamehta12"
+      }
+    ],
+    "reviewed_by": [],
+    "approved_by": [],
+    "information_cutoff": "2026-11-20"
+  },
+  "publication": {
+    "status": "review"
+  },
+  "links": [
+    {
+      "label": "Publication (DOI)",
+      "url": "https://doi.org/10.22331/q-2021-04-15-433"
+    },
+    {
+      "label": "Publication (arXiv), with the ancillary estimate_costs.py",
+      "url": "https://arxiv.org/abs/1905.09749v3"
+    },
+    {
+      "label": "Gidney and Fowler (2019), the CCZ factory (the paper's Ref. 36)",
+      "url": "https://doi.org/10.22331/q-2019-04-30-135"
+    },
+    {
+      "label": "Gidney (2019), approximate encoded permutations and piecewise quantum adders (the paper's Ref. 33)",
+      "url": "https://arxiv.org/abs/1905.08488"
+    },
+    {
+      "label": "QDK (Q# and the resource estimator)",
+      "url": "https://github.com/microsoft/qdk"
+    }
+  ],
+  "reported": {
+    "figures": {
+      "toffoli_count": {
+        "value": 2700000000,
+        "unit": "count",
+        "locator": "Table 1, p. 3, row (ours) 2019, n = 2048",
+        "qualifier": "rounded",
+        "note": "Stated as 2.7 in the column \"Toffoli+T/2 Count (billions)\". Per run: Appendix A.1 and A.2 (pp. 28-29) say this column is not adjusted for the chance of retrying, and that the concrete values come from the ancillary file estimate_costs.py. The abstract gives the expression 0.3n^3 + 0.0005n^3 lg n, an approximate upper bound that assumes n_e = 1.5n (Sec. 2.8, p. 9); Sec. 2.12 (p. 13) says about 3 billion CCZ states must be distilled."
+      },
+      "physical_qubits": {
+        "value": 20000000,
+        "unit": "count",
+        "locator": "Title; Table 2, p. 3; Table 3, n = 2048 row, p. 16",
+        "qualifier": "rounded",
+        "note": "Stated as 20 million (title), 20 million (Table 2, \"(ours) 2019 (parallel)\") and 20 megaqubits (Table 3). Sec. 2.14 (p. 13) works the layout through by hand at about 23 million and explains that the title's figure comes from estimate_costs.py, which uses a level-1 code distance of 15 instead of 17."
+      },
+      "runtime_seconds": {
+        "value": 28800,
+        "unit": "seconds",
+        "locator": "Title",
+        "qualifier": "approximate",
+        "note": "Stated as 8 hours, including repeated runs. Table 2 (p. 3) gives an expected runtime of 0.31 days; Table 3 (p. 16) gives 5.1 hours per run with a 31% retry risk; Sec. 2.11 (p. 11) estimates about 7 hours for one run with simplified parameters."
+      },
+      "code_distance": {
+        "value": 27,
+        "unit": "count",
+        "locator": "Table 3, n = 2048 row, p. 16",
+        "note": "The level-2 distance used for computation (d2). Distillation uses a level-1 distance of 15 (Table 3). Secs. 2.10-2.14 also use 27, with a level-1 distance of 17."
+      }
+    },
+    "notes": [
+      "Transcribed from Gidney and Ekerå, How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits, Quantum 5, 433 (2021). Page numbers follow the published PDF, which has the same text and pagination as arXiv:1905.09749v3.",
+      "No logical-qubit figure is recorded. The paper gives only the expression 3n + 0.002n lg n (abstract; Table 1) and prints no value at n = 2048, and the registry records only printed values. The reproduction's peak logical qubit count is in results.json and is not compared.",
+      "The physical-qubit and runtime figures are the title's headline figures, as the issue asks; the more detailed values behind them are in the notes above."
+    ]
+  },
+  "reproductions": [
+    {
+      "id": "qsharp-modexp-qre-2026-11",
+      "tool": {
+        "name": "A Q# circuit for the paper's modular exponentiation, the paper's layout and timing model rebuilt as code, and the QDK resource estimator",
+        "role": "The notebook builds the windowed modular exponentiation of Section 2 as a Q# circuit (coset representation, oblivious carry runways with the runway reduction of Fig. 3, Cuccaro adders confined to each runway piece, table lookups with measurement-based uncomputation, and the semi-classical Fourier transform). It checks the circuit by simulation on small instances: the whole exponentiation exactly against modular powers, the superposed initialization against an exact classical count, and order finding end to end against the ideal frequency distribution. It counts the circuit at full size with Table 3's parameters and applies the layout and timing model of Secs. 2.10-2.14, rebuilt as code, to those counts. The QDK resource estimator gives an independent physical estimate. The authors' ancillary script is downloaded, checked against a pinned SHA-256, and rerun as a cross-check only.",
+        "url": "https://github.com/microsoft/qdk"
+      },
+      "headline_scenario": "paper-layout-rebuilt",
+      "scenarios": {
+        "paper-layout-rebuilt": {
+          "label": "The paper's layout and timing model, rebuilt",
+          "description": "Secs. 2.10-2.14 as code, applied to the circuit's counts. Each runway piece is the stated width (fourteen CCZ factories of fifteen by eight patches at level-1 distance seventeen, in two rows) and thirty-three rows of operating area, plus the rows the three registers' share of the piece fills. Each patch takes 2(d+1)^2 physical qubits at the imposed distance of Table 3. Each lookup addition takes d/2 cycles per sequential Toffoli of its lookup, one reaction time per Toffoli of one piece's adder (pieces in parallel), and the stated millisecond for the rest; runway reductions are reaction limited. Topological, distillation, approximation and post-processing failures combine assuming independence, and the expected runtime divides the time per run by the chance a run succeeds. The model uses only the cycle and reaction times; the gate and measurement times in results.json are the estimator scenario's, recorded because the schema requires them. The comparison table uses this scenario.",
+          "references": [
+            {
+              "label": "Gidney and Fowler (2019), efficient magic state factories with a catalyzed CCZ to 2T transformation",
+              "url": "https://doi.org/10.22331/q-2019-04-30-135"
+            },
+            {
+              "label": "Gidney and Fowler (2019), flexible layout of surface code computations using AutoCCZ states",
+              "url": "https://arxiv.org/abs/1905.08916"
+            }
+          ]
+        },
+        "qre-cultivation-ccx": {
+          "label": "QDK resource estimator, cultivation and CCX factories",
+          "description": "An independent physical model of the same counts. One run is the circuit's Toffoli count executed one after another on its peak logical qubits, with Toffolis consumed as CCX magic states through lattice surgery. Toffoli states come from magic state cultivation followed by the 8T-to-CCX factory of Gidney, Shutty, and Jones (2024). The estimator chooses the code distance, searching the paper's range, and uses its own timing with no separate reaction time. Its per-run error budget is the topological and distillation error the rebuilt layout spends; the expected runtime also accounts for the approximation and post-processing failures.",
+          "references": [
+            {
+              "label": "Gidney, Shutty, and Jones (2024), magic state cultivation",
+              "url": "https://arxiv.org/abs/2409.17595"
+            }
+          ]
+        }
+      },
+      "figures": {
+        "logical_qubits": {
+          "value": 6430,
+          "unit": "count",
+          "source": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json#/logical/num_qubits"
+        },
+        "toffoli_count": {
+          "value": 2693430190,
+          "unit": "count",
+          "source": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json#/logical/toffoli_count"
+        },
+        "physical_qubits": {
+          "value": 22325184,
+          "unit": "count",
+          "source": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json#/physical/0/physical_qubits"
+        },
+        "runtime_seconds": {
+          "value": 24460.223,
+          "unit": "seconds",
+          "source": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json#/physical/0/runtime_seconds"
+        },
+        "code_distance": {
+          "value": 27,
+          "unit": "count",
+          "source": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json#/physical/0/code/distance"
+        }
+      },
+      "deviations_from_reported": [
+        {
+          "aspect": "Logical-qubit figure",
+          "reported": "No value at n = 2048; the abstract and Table 1 give the expression 3n + 0.002n lg n, which leaves out distillation and routing",
+          "used": "The peak qubit count of the built circuit, recorded but not compared",
+          "why": "The registry records only printed values, so there is no reported figure to compare against. The circuit's peak also counts the lookup's temporary qubits and the zero padding of the lookup output register."
+        },
+        {
+          "aspect": "Table lookup",
+          "reported": "QROM read with a Toffoli count of 2^(c_exp + c_mul), uncomputed by measurement-based uncomputation at about 2 sqrt(2^(c_exp + c_mul)) Toffolis (Sec. 2.5, Babbush et al. and Berry et al.)",
+          "used": "The QDK's Select operation, a unary-iteration lookup with measurement-based uncomputation, counted on the circuit",
+          "why": "It implements the constructions the paper cites. The notebook counts it at a few Toffolis fewer than the paper's round figures for each lookup and a few fewer for each uncomputation; its count does not depend on the table contents."
+        },
+        {
+          "aspect": "Adder",
+          "reported": "Cuccaro ripple-carry adder, 2n Toffolis for an n-bit addition (Sec. 2.5); the authors' script counts 2(c_sep + c_pad) - 1 per piece",
+          "used": "Cuccaro's adder modulo 2^m inside each runway piece, 2(m - 1) Toffolis, and a carry-out variant with 2m Toffolis for the runway reductions",
+          "why": "Additions inside a piece are modulo the piece's size by design (overflow is the deviation the paper bounds), so the top carry is not needed. The difference is a Toffoli or two per piece per addition."
+        },
+        {
+          "aspect": "Factor bits per multiply-add",
+          "reported": "n + O(lg n) bits including padding and one carry qubit per reduced runway (Secs. 2.7-2.8, Fig. 3); the authors' script iterates over n + c_pad + 2 bits",
+          "used": "The bits of the built circuit after the runway reduction of Fig. 3, n + c_pad + (pieces - 1)",
+          "why": "The count follows the circuit. With two runway pieces it differs from the script's figure by one bit, which changes the number of lookup additions by a small fraction of a percent."
+        },
+        {
+          "aspect": "Padding length",
+          "reported": "c_pad = 2 lg n + lg n_e + delta_off (Secs. 2.8 and 3.1), without saying how it is rounded",
+          "used": "The sum rounded up to an integer, then delta_off added",
+          "why": "A qubit count must be an integer; rounding up keeps the deviation within the paper's bound. The authors' script rounds the same way."
+        },
+        {
+          "aspect": "Gate and measurement times",
+          "reported": "Not stated; the paper gives only a 1 µs surface-code cycle and a 10 µs reaction time (abstract; Table 2)",
+          "used": "The estimator's 100 ns gates and 500 ns measurements, recorded for both scenarios; the rebuilt layout uses only the cycle and reaction times",
+          "why": "The results schema requires gate and measurement times for every scenario and has no field for a reaction time, so the reaction time is stated in the scenario's synthesis text and in the claim's assumptions instead."
+        },
+        {
+          "aspect": "Lookup tables and modulus in the full-size count",
+          "reported": "Tables precomputed from the actual modulus and exponentiation constants",
+          "used": "All-zero tables and the placeholder modulus 2^2047 + 1 when counting at full size; real tables in every simulation check",
+          "why": "The lookup's Toffoli count depends only on its address size, which the notebook confirms; the modulus enters only the initialization's constant additions, a negligible part of the count."
+        },
+        {
+          "aspect": "Algorithm used in the small checks",
+          "reported": "Ekerå-Håstad short discrete logarithm (Sec. 2.1)",
+          "used": "The same exponentiation circuit with the constants of Shor's order finding, and with random constants in the exact checks",
+          "why": "The construction does not depend on which classical constants are multiplied in (Sec. 2.1), and order finding has an ideal output distribution that can be computed for a small modulus."
+        },
+        {
+          "aspect": "Phase corrections when counting",
+          "reported": "Classically controlled phase shifts on each exponent qubit, combined into one shift whose cost the paper treats as negligible (Sec. 2.3)",
+          "used": "One generic rotation per exponent qubit when counting; the exact measured-outcome-dependent angles when simulating",
+          "why": "The counter cannot know the measurement outcomes, and outcome-dependent angles made its rotation count vary from run to run."
+        },
+        {
+          "aspect": "Initialization",
+          "reported": "Two registers prepared in the coset representation with oblivious carry runways, at negligible cost (Sec. 2.15), without a construction",
+          "used": "Each coset padding qubit controls adding a multiple of N and is uncomputed by a comparison; each runway is put in uniform superposition and subtracted from the piece above, top piece first",
+          "why": "The paper gives no construction. The notebook checks the measured failure rate of this initialization against an exact classical count; the cost is counted and is a negligible fraction of the total."
+        },
+        {
+          "aspect": "Counting method",
+          "reported": "Not applicable (the paper's counts come from formulas and its script)",
+          "used": "The count composed from the circuit with no exponent windows and with one window of each size, multiplied by the number of windows of each size",
+          "why": "Counting all windowed multiplications directly exhausted memory in the QDK's estimate caching. The notebook checks on three smaller instances that the composed count equals the direct count, with and without caching."
+        },
+        {
+          "aspect": "Parameter search",
+          "reported": "Window sizes, runway spacing, padding offset and code distances chosen by minimizing a skewed expected spacetime volume (Sec. 3.1)",
+          "used": "Table 3's chosen parameters, imposed",
+          "why": "The aim is to reproduce the costs of the configuration the paper reports. The authors' script, rerun in the notebook, selects the same configuration."
+        },
+        {
+          "aspect": "Level-1 code distance and factory footprint in the layout",
+          "reported": "Level-1 distance 15 (Table 3); the text states the factory footprint, fifteen by eight patches, only for level-1 distance seventeen (Sec. 2.10)",
+          "used": "The footprint and level-1 distance seventeen stated in the text",
+          "why": "The footprint at fifteen is not given in the text. This is the layout Sec. 2.14 evaluates by hand; the paper says its script finds a more compact layout at fifteen, which the rebuilt layout therefore does not capture."
+        },
+        {
+          "aspect": "Width of a runway piece",
+          "reported": "\"15 · 7 + 7 = 113 logical qubits\" (Sec. 2.10, p. 11)",
+          "used": "The stated width, one gap column more than the expression evaluates to",
+          "why": "The stated value matches the board size the paper uses elsewhere (Secs. 2.13-2.14) and the authors' script, which adds a gap column at the edge."
+        },
+        {
+          "aspect": "Distillation error",
+          "reported": "A total of 6.4% for about 3 billion CCZ states at level-1 distance seventeen and level-2 distance twenty-seven, from the spreadsheet of the paper's Ref. [36] (Sec. 2.12)",
+          "used": "The same ratio applied to the circuit's Toffoli count",
+          "why": "The text gives no per-state figure; the ratio is the closest stated value. Because the state count is stated only approximately, this term is uncertain by roughly the same proportion."
+        },
+        {
+          "aspect": "Lookup time",
+          "reported": "1 µs · d/2 · 2^(c_exp + c_mul) per lookup (Sec. 2.11)",
+          "used": "d/2 cycles for each sequential Toffoli of the circuit's own lookup, for each address size used",
+          "why": "The circuit's lookup has a few Toffolis fewer than the round figure, and some lookups have smaller addresses."
+        },
+        {
+          "aspect": "Runway reductions in the runtime",
+          "reported": "Not included in the runtime estimate",
+          "used": "Each reduction and its reversal timed as reaction-limited additions",
+          "why": "They are part of the built circuit; their share of the runtime is small."
+        },
+        {
+          "aspect": "Estimator scenario",
+          "reported": "Gidney-Fowler CCZ factories with AutoCCZ fixups, a 10 µs reaction time, reaction-limited additions running in parallel runway pieces, and code-depth-limited lookups (Secs. 2.10-2.11)",
+          "used": "Magic state cultivation followed by the 8T-to-CCX factory, the estimator's own timing with 100 ns gates and 500 ns measurements and no reaction time, Toffolis executed one after another, and distances searched over the paper's range",
+          "why": "These are the closest models the QDK estimator provides. It cannot express the paper's piecewise parallel additions, so its runtime is much longer; its qubit count and chosen code distance are an independent check on the layout.",
+          "references": [
+            {
+              "label": "Gidney, Shutty, and Jones (2024), magic state cultivation",
+              "url": "https://arxiv.org/abs/2409.17595"
+            }
+          ]
+        }
+      ],
+      "interpretation": {
+        "label": "consistent_with_caveats",
+        "statement": "The construction of Section 2, built as a circuit, computes modular exponentiations exactly on every small instance checked, keeps the phases that order finding needs, and at full size needs the Toffoli count of Table 1 to within a fraction of a percent. The paper's own layout and timing model, rebuilt from the text and applied to the circuit's counts, gives somewhat more physical qubits than the headline and a somewhat shorter expected runtime. The extra qubits are the difference the paper itself points out between the layout described in its text and the more compact one its script uses, which the text does not specify. The QDK estimator independently chooses the same code distance and a similar qubit count, but with Toffolis executed one after another its runtime is several times longer, which shows how much the runtime claim rests on the reaction-limited parallel additions."
+      },
+      "notes": [
+        "The authors' ancillary script estimate_costs.py is downloaded from arXiv at run time and checked against a pinned SHA-256 before it runs, so re-executing the notebook needs network access. Its outputs are printed in the notebook for comparison and are not part of results.json.",
+        "The simulation checks are seeded, and each shot is a direct call so that the seed applies; re-executing the notebook reproduces results.json exactly.",
+        "The Q# circuit is in modexp.qs and the layout model in physical_layout.py, next to the notebook; every constant in physical_layout.py carries its locator in the paper."
+      ],
+      "results": {
+        "schema_version": "1.0",
+        "claim_id": "gidney-ekera-rsa2021",
+        "reproduction_id": "qsharp-modexp-qre-2026-11",
+        "generated_at": "2026-11-20T21:07:07+00:00",
+        "producer": {
+          "entrypoint": "notebook.ipynb",
+          "cell_tag": "results-export"
+        },
+        "tooling": {
+          "python": "3.10.18",
+          "packages": {
+            "qdk": "1.33.1",
+            "numpy": "2.2.6",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9"
+          }
+        },
+        "inputs": {
+          "factoring": {
+            "kind": "rsa",
+            "modulus_bits": 2048,
+            "algorithm": "Ekerå–Håstad short discrete logarithm, one run; windowed modular exponentiation in the coset representation with oblivious carry runways",
+            "parameters": {
+              "n_e": 3029,
+              "c_exp": 5,
+              "c_mul": 5,
+              "c_sep": 1024,
+              "c_pad": 38,
+              "delta_off": 4,
+              "level1_distance_table3": 15,
+              "level2_distance_table3": 27,
+              "count_modulus": "2^2047 + 1 (placeholder; lookup tables are all zeros when counting)"
+            }
+          }
+        },
+        "logical": {
+          "num_qubits": 6430,
+          "t_count": 0,
+          "rotation_count": 3029,
+          "ccz_count": 2693430190,
+          "ccix_count": 0,
+          "measurement_count": 1580249027,
+          "toffoli_count": 2693430190
+        },
+        "physical": [
+          {
+            "scenario_id": "paper-layout-rebuilt",
+            "architecture": {
+              "physical_error_rate": 0.001,
+              "gate_time_ns": 100,
+              "measurement_time_ns": 500
+            },
+            "code": {
+              "family": "surface",
+              "distance": 27,
+              "distance_source": "imposed",
+              "cycle_time_ns": 1000
+            },
+            "factories": "28 CCZ factories (Gidney and Fowler), 15 x 8 logical patches each at level-1 distance 17 (Sec. 2.10)",
+            "synthesis": "Toffolis as CCZ states converted to AutoCCZ states; reaction-limited ripple-carry additions in parallel runway pieces (10000 ns reaction time); code-depth-limited lookups with double-access hallways (Secs. 2.10-2.11)",
+            "physical_qubits": 22325184,
+            "compute_qubits": 17056704,
+            "factory_qubits": 5268480,
+            "memory_qubits": 0,
+            "runtime_seconds": 24460.223,
+            "runtime_seconds_per_shot": 18228.204,
+            "error_budget": 1.0,
+            "achieved_error": 0.254782
+          },
+          {
+            "scenario_id": "qre-cultivation-ccx",
+            "architecture": {
+              "physical_error_rate": 0.001,
+              "gate_time_ns": 100,
+              "measurement_time_ns": 500
+            },
+            "code": {
+              "family": "surface",
+              "distance": 27,
+              "distance_source": "selected_by_tool",
+              "cycle_time_ns": 1000
+            },
+            "factories": "2×CCX",
+            "synthesis": "Toffolis as CCX magic states (PSSPC) from magic state cultivation and the GSJ24 8T-to-CCX factory; lattice surgery; Toffolis executed one after another",
+            "physical_qubits": 19099192,
+            "compute_qubits": 19069216,
+            "factory_qubits": 29976,
+            "memory_qubits": 0,
+            "runtime_seconds": 237315.544,
+            "runtime_seconds_per_shot": 218167.845,
+            "error_budget": 0.244353,
+            "achieved_error": 0.067819
+          }
+        ]
+      },
+      "run": {
+        "schema_version": "1.0",
+        "reproduction_id": "qsharp-modexp-qre-2026-11",
+        "executed_at": "2026-11-20T21:07:08+00:00",
+        "executed_by": {
+          "name": "Siya Mehta",
+          "github": "siyamehta12"
+        },
+        "host": {
+          "platform": "macOS-14.6-arm64-arm-64bit",
+          "machine": "arm64"
+        },
+        "duration_seconds": 208.98,
+        "python": "3.10.18",
+        "lockfile": "requirements.lock.txt",
+        "entrypoint": "notebook.ipynb",
+        "entrypoint_sha256": "24f2e27572fed36ec8584378579683643b323d941f1c5db56180df36bb929edc",
+        "results_sha256": "3b269dd86759de7b518796c61ff92e79685755a4db6e8cede068249d4c6b3864",
+        "lockfile_sha256": "e78e1bf72f4acfe569b837f112af22ec7c6b197d72eab3080b3c784989b6357d",
+        "command": "/Users/siyamehta/code/qac-claims/.venv/bin/python3 -m jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=3600 --ExecutePreprocessor.kernel_name=python3 --output executed.ipynb notebook.ipynb"
+      },
+      "artifacts": {
+        "code": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/notebook.ipynb",
+        "results": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json",
+        "run": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/run.json",
+        "lockfile": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/requirements.lock.txt"
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "aspect": "toffoli_count",
+      "unit": "count",
+      "reported": 2700000000,
+      "reproduced": 2693430190,
+      "ratio": 0.9976,
+      "reproduction_id": "qsharp-modexp-qre-2026-11"
+    },
+    {
+      "aspect": "physical_qubits",
+      "unit": "count",
+      "reported": 20000000,
+      "reproduced": 22325184,
+      "ratio": 1.1163,
+      "reproduction_id": "qsharp-modexp-qre-2026-11"
+    },
+    {
+      "aspect": "runtime_seconds",
+      "unit": "seconds",
+      "reported": 28800,
+      "reproduced": 24460.223,
+      "ratio": 0.8493,
+      "reproduction_id": "qsharp-modexp-qre-2026-11"
+    },
+    {
+      "aspect": "code_distance",
+      "unit": "count",
+      "reported": 27,
+      "reproduced": 27,
+      "ratio": 1.0,
+      "reproduction_id": "qsharp-modexp-qre-2026-11"
+    }
+  ],
+  "provenance": {
+    "build": {
+      "tool": "qacclaims",
+      "tool_version": "0.1.0"
+    },
+    "sources": [
+      {
+        "path": "claims/gidney-ekera-rsa2021/claim.yaml",
+        "sha256": "6ebc351584c88f260951c0e174de80fb180e8842b38f595ed4702b1e58134319"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/estimates/reported.yaml",
+        "sha256": "7e2362af511a7b35154d2a32b81d853bc4e02b8720fe46445c30fa6d608fbda5"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/estimates/reproduction-qsharp-modexp-qre-2026-11.yaml",
+        "sha256": "33cfdac63f2fc988fb296e9c0ba47ee2ed2c3ba92ff59c476466ba9806777638"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/results.json",
+        "sha256": "3b269dd86759de7b518796c61ff92e79685755a4db6e8cede068249d4c6b3864"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/run.json",
+        "sha256": "272a9ded137dfc05f2dc2aab21090f3cbe7502a1d05c6e2e52298d728183c42d"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/notebook.ipynb",
+        "sha256": "24f2e27572fed36ec8584378579683643b323d941f1c5db56180df36bb929edc"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/requirements.lock.txt",
+        "sha256": "e78e1bf72f4acfe569b837f112af22ec7c6b197d72eab3080b3c784989b6357d"
+      },
+      {
+        "path": "claims/gidney-ekera-rsa2021/narrative.md",
+        "sha256": "b5b91a36ca0d3cc862d12418708d2d2896e4ea1cd63dfc88b07f5069613d8c0c"
+      }
+    ]
+  },
+  "narrative_markdown": "# Reproducing the RSA-2048 resource estimate of Gidney and Ekerå (2021)\n\n*Siya Mehta, PlexTech, UC Berkeley.*\n*Numbers in this page are rendered from the claim record; the record's numbers come from the executed notebook in `reproductions/qsharp-modexp-qre-2026-11/`.*\n\n## The claim\n\n[Gidney and Ekerå (2021)](https://doi.org/10.22331/q-2021-04-15-433) estimate what it would take to break\nRSA-2048, the most widely used RSA key size, with Shor-type\nalgorithms on an error-corrected quantum computer. Read literally, the paper claims:\n\n> A 2048-bit RSA integer could be factored in about 8 hours with about 20 million noisy qubits.\n\nTwo layers of numbers sit behind that sentence.\n\n**Logical counts.** Almost all of the work is one modular exponentiation. The paper makes it cheap by\ncombining several techniques: Ekerå and Håstad's variant of Shor's algorithm, which needs fewer\nmultiplications; windowed arithmetic, which turns many controlled additions into a few table lookups\nfollowed by additions; the coset representation of modular integers, which lets cheap non-modular adders\ndo modular arithmetic approximately; and oblivious carry runways, which split each register into pieces\nthat are added in parallel. The paper reports about 2.7 × 10⁹\nToffoli gates per run (Table 1). For the number of logical qubits it gives only an expression,\n$3n + 0.002\\,n \\lg n$, and no value at this size, so this record does not compare logical qubits.\n\n**Physical resources.** The paper assumes a planar grid of qubits with nearest-neighbour connectivity, a\nphysical gate error rate of 1 × 10⁻³, a surface-code\ncycle of 1 × 10⁻⁶ s, and a reaction time of\n1 × 10⁻⁵ s for the control system to decode a measurement and\nact on it. It lays the computation out with Gidney–Fowler CCZ factories feeding ripple-carry additions\nthat are limited by that reaction time, uses distance-27\nsurface-code patches, and accepts a retry risk of 0.31 per run\n(Table 3). Including repeated runs, it arrives at about 20 million\nphysical qubits and about 8 hours (title).\n\n## What QAC did\n\nWe built the modular exponentiation of the paper's Section 2 as a circuit in Q#, the programming language of\nthe [QDK](https://github.com/microsoft/qdk) (version 1.33.1), and\ncosted it ourselves rather than evaluating the paper's formulas. The\n[executed notebook](https://github.com/QuantumApplicationsCenter/qac-claims/blob/main/claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/notebook.ipynb)\nwalks through every step.\n\n**The circuit.** Each register is stored in runway pieces with coset padding at the top. Each windowed\nmultiplication is two multiply-adds and a swap. Each multiply-add looks up a precomputed multiple of a\nconstant, addressed by a window of exponent bits and a window of the other register's bits, adds it into\nevery piece of the target in parallel with Cuccaro's ripple-carry adder, and uncomputes the lookup by\nmeasurement. The exponent is read out by the semi-classical Fourier transform, a few qubits at a time.\n\n**Checking it.** On small instances the notebook checks the adders on random inputs, and the whole\nexponentiation exactly against modular powers, with one, two and three runway pieces. It checks that\npreparing the padding and runways in superposition fails exactly as often as an exhaustive classical count\npredicts; with tiny paddings that is often, which is the approximation the paper bounds. And it runs order\nfinding end to end: the measured frequencies land on the peaks of the ideal distribution, so the arithmetic\nkeeps the phases that Shor's algorithm needs. Building it exposed two subtle mistakes of ours, an inverted\ncomparison in the initialization and an ordering of the runway setup that made overflow more likely; the\nchecks caught both, and both are fixed.\n\n**Logical counts.** With Table 3's parameters ($n_e$ = 3,029\nexponent qubits, windows of 5 and\n5 bits, runways every\n1,024 bits, padding of\n38 bits), the circuit needs\n2.69 × 10⁹ Toffoli gates per run, a ratio of\n1.00× to the paper's figure, and\n6,430 logical qubits at its peak. As a cross-check, the\nnotebook also downloads the authors' own cost script from arXiv and reruns it: its parameter search selects\nexactly Table 3's configuration, and its Toffoli count agrees with the circuit's to within a fraction of a\npercent.\n\n**Physical resources.** We rebuilt the paper's layout and timing model (Secs. 2.10–2.14) as code, with each\nconstant tied to its place in the text, and applied it to the circuit's own counts: lookups limited by code\ndepth, additions limited by the reaction time, runway pieces in parallel, and failures from the surface code,\nthe factories, the approximation and post-processing combined into a retry risk. This gives\n22.33 million physical qubits\n(22,325,184) and\n5.1 hours per run, or\n6.8 hours expected including repeated runs. An independent\nestimate with the QDK resource estimator, using magic state cultivation and an 8T-to-CCX factory in place of\nthe paper's CCZ factories, chooses distance-27 patches on\nits own and needs 19.1 million physical qubits, but\n2.7 days of expected runtime.\n\n## How to read the comparison\n\nThe Toffoli count compares the same construction at the same parameters, and it agrees closely\n(1.00×). The physical figures use the paper's own model, so their\nratios (1.12× for physical qubits and\n0.85× for runtime) mostly reflect what the text does and does\nnot specify. The text gives the factory footprint only for a larger level-1 distance than Table 3 uses,\nand its own hand calculation at that layout (Sec. 2.14) also lands above the headline; the paper says the\nheadline comes from its script, which finds a more compact layout at Table 3's level-1 distance of\n15, a layout the text does not describe. The runtime is a little shorter than the rounded headline.\n\nThe estimator's figures show which assumptions carry the claim. Its qubit count and code distance land\nclose to the paper's, but its runtime is far longer, because it executes the Toffolis one after another and\nhas no notion of the reaction-limited additions that run in parallel runway pieces. The paper's\n8 hours is a property of that architecture, not just of the gate\ncount.\n\n## What this does not show, and what comes next\n\n- It does not reproduce the title's qubit count from the text alone: the more compact factory layout behind\n  it is in the authors' script, not in the paper.\n- The distillation error per CCZ state is taken from the paper's aggregate figure (Sec. 2.12), not from a\n  simulation of the factory, and the CCZ factory itself is not rebuilt.\n- The full-size circuit is counted, not simulated; the order-finding check uses a small modulus.\n- No logical-qubit comparison is made, because the paper prints only an asymptotic expression.\n- A natural next step is to rebuild the factory layout of the paper's Refs. 36 and 37 at the level-1\n  distance Table 3 uses, which would make the physical-qubit comparison exact.\n\n## Reproducing this result\n\nThe [notebook](https://github.com/QuantumApplicationsCenter/qac-claims/blob/main/claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/notebook.ipynb)\nruns in about 209 seconds on a laptop, in the environment pinned by\n`requirements.lock.txt` (Python 3.10.18). It downloads the authors'\nscript from arXiv, so it needs network access. From a checkout of this repository:\n\n```bash\npython3.10 -m venv .venv && source .venv/bin/activate\npip install -r claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11/requirements.lock.txt\npip install -e \".[execute]\"\nqacclaims execute claims/gidney-ekera-rsa2021/reproductions/qsharp-modexp-qre-2026-11\n```\n\nThe last command re-executes the notebook and reports any difference from the committed `results.json`.\n"
+}
