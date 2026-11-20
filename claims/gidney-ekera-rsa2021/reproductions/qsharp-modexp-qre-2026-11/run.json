@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "reproduction_id": "qsharp-modexp-qre-2026-11",
+  "executed_at": "2026-11-23T21:11:25+00:00",
+  "executed_by": {
+    "name": "Siya Mehta",
+    "github": "siyamehta12"
+  },
+  "host": {
+    "platform": "macOS-14.6-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "duration_seconds": 261.26,
+  "python": "3.10.18",
+  "lockfile": "requirements.lock.txt",
+  "entrypoint": "notebook.ipynb",
+  "entrypoint_sha256": "97dd2bca99eef2069d170bfa4343a09ff354b103176c43605d8709dfee00ac8e",
+  "results_sha256": "4dc690cfbcd64b48cdec69a1196fc6bb8fc31454d9756369f4161bd29ecf85a8",
+  "lockfile_sha256": "e78e1bf72f4acfe569b837f112af22ec7c6b197d72eab3080b3c784989b6357d",
+  "command": "/Users/siyamehta/code/qac-claims/.venv/bin/python3 -m jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=3600 --ExecutePreprocessor.kernel_name=python3 --output executed.ipynb notebook.ipynb"
+}

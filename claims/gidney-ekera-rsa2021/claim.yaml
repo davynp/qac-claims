@@ -1,0 +1,187 @@
+schema_version: "1.0"
+id: gidney-ekera-rsa2021
+title: RSA-2048 factoring resource estimate with windowed arithmetic, coset representation, and oblivious carry runways (Gidney and Ekerå, 2021)
+short_title: RSA-2048 resource estimate (Gidney & Ekerå 2021)
+headline: A 2048-bit RSA integer could be factored in about 8 hours with about 20 million noisy qubits.
+claim_type: literature_resource_estimate
+domain: cryptanalysis
+taxonomy: application
+
+source:
+  type: journal_article
+  title: How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits
+  authors:
+    - Craig Gidney
+    - Martin Ekerå
+  author_list_complete: true
+  year: 2021
+  venue:
+    name: Quantum
+    volume: "5"
+    article: "433"
+  doi: 10.22331/q-2021-04-15-433
+  arxiv: 1905.09749v3
+
+assertion:
+  what_is_claimed: >-
+    Factoring a 2048-bit RSA integer with Ekerå and Håstad's algorithm, using windowed arithmetic, the
+    coset representation of modular integers, and oblivious carry runways, takes about 2.7e9 Toffoli
+    gates per run; on a planar grid of qubits with nearest-neighbour connectivity, a physical gate error
+    rate of 1e-3, a 1 µs surface-code cycle, and a 10 µs reaction time, it costs about 20 million
+    physical qubits and about 8 hours, including repeated runs.
+  workload:
+    system: RSA-2048 (2048-bit modulus), factored through Ekerå and Håstad's short discrete logarithm in a single run
+    target_observable: factors of a 2048-bit RSA integer
+    target_precision:
+      value: 0.01
+      unit: dimensionless
+      locator: "Sec. 2.1, p. 5; Sec. 3.2, p. 16"
+      note: >-
+        Factoring has no numerical precision target. This is the paper's bound on the classical
+        post-processing failing to recover the factors from a correct run ("at least 99%" success),
+        recorded because the schema requires a target.
+  method: >-
+    Ekerå–Håstad short discrete logarithm; windowed modular exponentiation in the coset representation
+    with oblivious carry runways, Cuccaro ripple-carry adders and table lookups; semi-classical Fourier
+    transform
+  architecture_assumed: >-
+    Surface code with lattice surgery on a planar grid; Gidney–Fowler CCZ factories with AutoCCZ fixups;
+    reaction-limited ripple-carry additions running in parallel runway pieces and code-depth-limited
+    lookups (Secs. 2.10-2.14)
+
+assumptions_as_reported:
+  physical_error_rate:
+    value: 1.0e-3
+    unit: dimensionless
+    locator: "Abstract, p. 1; Table 2, p. 3"
+  surface_code_cycle_time:
+    value: 1.0e-6
+    unit: seconds
+    locator: "Abstract, p. 1; Table 2, p. 3"
+  reaction_time:
+    value: 1.0e-5
+    unit: seconds
+    locator: "Abstract, p. 1; Table 2, p. 3"
+    note: Time for the control system to trigger a logical measurement, decode it, and choose the next measurement basis (Appendix B.1, p. 30)
+  connectivity:
+    value: planar grid with nearest-neighbour connectivity
+    locator: "Abstract, p. 1; Table 2, p. 3"
+  modulus_bits:
+    value: 2048
+    unit: bits
+    locator: "Title; Table 3, p. 16"
+  exponent_qubits:
+    value: "n_e = 3(n/2 - 1) - 40"
+    locator: "Table 3, p. 16"
+    note: Ekerå–Håstad's algorithm with a single run (Sec. 3.2)
+  exponent_window:
+    value: 5
+    unit: bits
+    locator: "Table 3, n = 2048 row, p. 16"
+  multiplication_window:
+    value: 5
+    unit: bits
+    locator: "Table 3, n = 2048 row, p. 16"
+  runway_separation:
+    value: 1024
+    unit: bits
+    locator: "Table 3, n = 2048 row, p. 16"
+  padding_offset:
+    value: 4
+    unit: bits
+    locator: "Table 3, n = 2048 row, p. 16"
+    note: "delta_off, with c_pad = 2 lg n + lg n_e + delta_off (Secs. 2.8 and 3.1)"
+  code_distance:
+    value: 27
+    unit: count
+    locator: "Table 3, n = 2048 row, p. 16"
+  level1_code_distance:
+    value: 15
+    unit: count
+    locator: "Table 3, n = 2048 row, p. 16"
+    note: Distance used inside the distillation factories; Secs. 2.10-2.14 use 17
+  ccz_factories:
+    value: 28
+    unit: count
+    locator: "Table 2, p. 3; Sec. 2.10, p. 11"
+    note: Fourteen per runway piece, two pieces
+  physical_qubits_per_logical_qubit:
+    value: "2(d + 1)^2"
+    locator: "Sec. 1.1, p. 2; Sec. 2.14, p. 13; Fig. 8, p. 14"
+  logical_error_rate_per_cycle:
+    value: "10^-ceil(d/2 + 1) per logical qubit per surface-code cycle at a 1e-3 gate error rate"
+    locator: "Sec. 2.13, p. 13"
+  retry_risk:
+    value: 0.31
+    unit: dimensionless
+    locator: "Table 3, n = 2048 row, p. 16"
+  post_processing_success:
+    value: "at least 99% from a correct run"
+    locator: "Sec. 2.1, p. 5; Sec. 3.2, p. 16"
+  qec_scheme:
+    value: surface code
+    locator: "Sec. 1.1, p. 2"
+
+assessment:
+  reproduction_status: fully_reproduced
+  summary_plain: >-
+    QAC built the paper's modular exponentiation as a Q# circuit, checked it on small instances, and
+    counted it at full size with Table 3's parameters: {{ reproductions.0.figures.toffoli_count.value | sci }}
+    Toffoli gates per run, against the paper's {{ reported.figures.toffoli_count.value | sci }}. The
+    paper's layout and timing model, rebuilt from the text and applied to those counts, gives
+    {{ reproductions.0.figures.physical_qubits.value | million }} physical qubits and an expected
+    {{ reproductions.0.figures.runtime_seconds.value | hours }}, against the paper's
+    {{ reported.figures.physical_qubits.value | million }} and {{ reported.figures.runtime_seconds.value | hours }}.
+  what_this_shows:
+    - The construction of Section 2, built as a circuit, computes modular exponentiations exactly on every small instance checked, and order finding with it lands on the ideal frequency peaks, so the arithmetic keeps the phases Shor's algorithm needs.
+    - At full size with Table 3's parameters, the circuit needs the Toffoli count of Table 1 to within a fraction of a percent.
+    - The paper's layout and timing model, rebuilt from its text and applied to the circuit's counts, gives a qubit count a little above the headline and a runtime a little below it; the extra qubits match the paper's own hand estimate in Sec. 2.14.
+    - The QDK resource estimator, given the same counts, independently chooses the same code distance and a qubit count close to the headline.
+  what_this_does_not_show:
+    - The title's 20 million qubits rest on a more compact factory layout at level-1 distance 15 that the text does not describe; the rebuilt layout uses the layout the text gives, at level-1 distance 17.
+    - The distillation error per CCZ state is taken from the paper's aggregate figure, not from a simulation of the factory.
+    - The runtime depends on reaction-limited additions running in parallel runway pieces; the QDK estimator, which runs Toffolis one after another without a reaction time, gives a runtime several times longer, so the 8-hour figure is specific to that architecture.
+    - No logical-qubit comparison is made, because the paper prints only an asymptotic expression for it.
+    - The full-size circuit is counted, not simulated; the end-to-end order-finding check uses a small modulus.
+  findings:
+    - aspect: toffoli_count
+      verdict: matches
+      note: Counted from the built circuit with Table 3's parameters; Table 1's figure is per run and rounded to two significant figures.
+    - aspect: physical_qubits
+      verdict: within_factor
+      note: The paper's layout as described in the text, which Sec. 2.14 itself puts above the headline; the headline uses a more compact factory layout from the authors' script.
+    - aspect: runtime_seconds
+      verdict: within_factor
+      note: The paper's per-operation timing applied to the circuit's counts, with the retry risk from the paper's error model; somewhat shorter than the rounded headline.
+    - aspect: code_distance
+      verdict: not_compared
+      note: Imposed from Table 3 in the rebuilt layout; the QDK estimator, choosing freely over the paper's search range, selects the same distance.
+    - aspect: logical_qubits
+      verdict: not_compared
+      note: The paper prints only the expression 3n + 0.002n lg n; the circuit's peak is recorded in results.json.
+  classical_status: not_solved_classically_at_target_accuracy
+  classical_status_note: No 2048-bit RSA integer has been publicly factored by classical means.
+
+review:
+  prepared_by:
+    - name: Siya Mehta
+      affiliation: PlexTech, UC Berkeley
+      github: siyamehta12
+  reviewed_by: []
+  approved_by: []
+  information_cutoff: "2026-11-20"
+
+links:
+  - label: Publication (DOI)
+    url: https://doi.org/10.22331/q-2021-04-15-433
+  - label: Publication (arXiv), with the ancillary estimate_costs.py
+    url: https://arxiv.org/abs/1905.09749v3
+  - label: Gidney and Fowler (2019), the CCZ factory (the paper's Ref. 36)
+    url: https://doi.org/10.22331/q-2019-04-30-135
+  - label: Gidney (2019), approximate encoded permutations and piecewise quantum adders (the paper's Ref. 33)
+    url: https://arxiv.org/abs/1905.08488
+  - label: QDK (Q# and the resource estimator)
+    url: https://github.com/microsoft/qdk
+
+publication:
+  status: review

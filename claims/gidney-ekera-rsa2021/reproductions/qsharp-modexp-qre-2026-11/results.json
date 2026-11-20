@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "claim_id": "gidney-ekera-rsa2021",
+  "reproduction_id": "qsharp-modexp-qre-2026-11",
+  "generated_at": "2026-11-23T21:11:24+00:00",
+  "producer": {
+    "entrypoint": "notebook.ipynb",
+    "cell_tag": "results-export"
+  },
+  "tooling": {
+    "python": "3.10.18",
+    "packages": {
+      "qdk": "1.33.1",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.9"
+    }
+  },
+  "inputs": {
+    "factoring": {
+      "kind": "rsa",
+      "modulus_bits": 2048,
+      "algorithm": "Ekerå–Håstad short discrete logarithm, one run; windowed modular exponentiation in the coset representation with oblivious carry runways",
+      "parameters": {
+        "n_e": 3029,
+        "c_exp": 5,
+        "c_mul": 5,
+        "c_sep": 1024,
+        "c_pad": 38,
+        "delta_off": 4,
+        "level1_distance_table3": 15,
+        "level2_distance_table3": 27,
+        "count_modulus": "2^2047 + 1 (placeholder; lookup tables are all zeros when counting)"
+      }
+    }
+  },
+  "logical": {
+    "num_qubits": 6430,
+    "t_count": 0,
+    "rotation_count": 3029,
+    "ccz_count": 2693430190,
+    "ccix_count": 0,
+    "measurement_count": 1580249027,
+    "toffoli_count": 2693430190
+  },
+  "physical": [
+    {
+      "scenario_id": "paper-layout-rebuilt",
+      "architecture": {
+        "physical_error_rate": 0.001,
+        "gate_time_ns": 100,
+        "measurement_time_ns": 500
+      },
+      "code": {
+        "family": "surface",
+        "distance": 27,
+        "distance_source": "imposed",
+        "cycle_time_ns": 1000
+      },
+      "factories": "28 CCZ factories (Gidney and Fowler), 15 x 8 logical patches each at level-1 distance 17 (Sec. 2.10)",
+      "synthesis": "Toffolis as CCZ states converted to AutoCCZ states; reaction-limited ripple-carry additions in parallel runway pieces (10000 ns reaction time); code-depth-limited lookups with double-access hallways (Secs. 2.10-2.11)",
+      "physical_qubits": 22325184,
+      "compute_qubits": 17056704,
+      "factory_qubits": 5268480,
+      "memory_qubits": 0,
+      "runtime_seconds": 24460.223,
+      "runtime_seconds_per_shot": 18228.204,
+      "error_budget": 0.31,
+      "achieved_error": 0.254782
+    },
+    {
+      "scenario_id": "qre-cultivation-ccx",
+      "architecture": {
+        "physical_error_rate": 0.001,
+        "gate_time_ns": 100,
+        "measurement_time_ns": 500
+      },
+      "code": {
+        "family": "surface",
+        "distance": 27,
+        "distance_source": "selected_by_tool",
+        "cycle_time_ns": 1000
+      },
+      "factories": "2×CCX",
+      "synthesis": "Toffolis as CCX magic states (PSSPC) from magic state cultivation and the GSJ24 8T-to-CCX factory; lattice surgery; Toffolis executed one after another",
+      "physical_qubits": 19099192,
+      "compute_qubits": 19069216,
+      "factory_qubits": 29976,
+      "memory_qubits": 0,
+      "runtime_seconds": 237315.544,
+      "runtime_seconds_per_shot": 218167.845,
+      "error_budget": 0.244353,
+      "achieved_error": 0.067819
+    }
+  ]
+}
